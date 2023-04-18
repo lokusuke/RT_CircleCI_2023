@@ -16,11 +16,13 @@ jobs:
       - aws-cli/setup:
           profile-name: default
       - aws-cli/role-arn-setup:
+          profile-name: circleci-oidc
           role-arn: ${AWS_ROLE_ARN}
       - run:
           name: aws-sts-assume-role
           command: |
             aws_sts_credentials=$(aws sts assume-role-with-web-identity \
+              --profile "circleci-oidc"
               --role-arn ${AWS_ROLE_ARN} \
               --web-identity-token ${CIRCLE_OIDC_TOKEN} \
               --role-session-name "circleci-oidc" \
