@@ -10,8 +10,8 @@ jobs:
       - checkout
       # run the aws-cli/setup command from the orb
       - aws-cli/setup:
-          role-arn: $AWS_ROLE_ARN
-          aws-region: "ap-northeast-1"
+          role-arn: AWS_ROLE_ARN
+          aws-region: AWS_DEFAULT_REGION
           # optional parameters
           profile-name: "OIDC-PROFILE"
           role-session-name: "circleci-session"
