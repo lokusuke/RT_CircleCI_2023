@@ -18,6 +18,7 @@ jobs:
       - aws-cli/role-arn-setup:
           profile-name: WEB IDENTITY PROFILE
           role-session-name: circleci-session
+          role-arn: $AWS_ROLE_ARN
       - run:
           name: s3-list-bucket
           command: |
