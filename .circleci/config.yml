@@ -17,13 +17,13 @@ jobs:
           profile-name: default
       - aws-cli/role-arn-setup:
           profile-name: WEB IDENTITY PROFILE
-          role-arn: $AWS_ROLE_ARN
+          role-arn: ${AWS_ROLE_ARN}
       - run:
           name: aws-sts-assume-role
           command: |
             aws sts assume-role-with-web-identity \
-              --role-arn $AWS_ROLE_ARN \
-              --web-identity-token $CIRCLE_OIDC_TOKEN \
+              --role-arn ${AWS_ROLE_ARN} \
+              --web-identity-token ${CIRCLE_OIDC_TOKEN} \
               --role-session-name circleci-session \
               --duration-seconds 900 \
               --query "Credentials" \
@@ -31,4 +31,5 @@ jobs:
 workflows:
   aws-cli:
     jobs:
-      - configure-role-arn
+      - configure-role-arn:
+          context: aws
