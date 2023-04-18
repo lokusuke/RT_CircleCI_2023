@@ -3,20 +3,26 @@
 version: 2.1
 
 orbs:
-  aws-cli: circleci/aws-cli@2.0.3
+  # See https://circleci.com/developer/orbs/orb/circleci/aws-cli
+  aws-cli: circleci/aws-cli@3.1.5
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  example-job:
-    docker:
-      # replace with your preferred image
-      - image: cimg/base:stable
+  configure-role-arn:
+    executor: aws-cli/default
     steps:
-      - aws-cli/install:
-          disable-aws-pager: true 
-
+      - checkout
+      - aws-cli/setup:
+          profile-name: default
+      - aws-cli/role-arn-setup:
+          profile-name: WEB IDENTITY PROFILE
+          role-session-name: circleci-session
+      - run:
+          name: s3-list-bucket
+          command: |
+            aws sts assume-role --role-arn $AWS_ROLE_ARN --role-session-name circleci-session
 workflows:
-  example-workflow:
+  aws-cli:
     jobs:
-      - example-job
+      - configure-role-arn
