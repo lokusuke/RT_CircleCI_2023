@@ -12,16 +12,21 @@ jobs:
   configure-role-arn:
     executor: aws-cli/default
     steps:
-      - checkout
+      - checkout  
       - aws-cli/setup:
           profile-name: default
       - aws-cli/role-arn-setup:
           profile-name: WEB IDENTITY PROFILE
           role-arn: $AWS_ROLE_ARN
       - run:
-          name: s3-list-bucket
+          name: aws-sts-assume-role
           command: |
-            aws sts assume-role --role-arn $AWS_ROLE_ARN --role-session-name circleci-session
+            aws sts assume-role-with-web-identity \
+              --role-arn $AWS_ROLE_ARN \
+              --role-session-name circleci-session \
+              --duration-seconds 900 \
+              --query "Credentials" \
+              --output "json") 
 workflows:
   aws-cli:
     jobs:
