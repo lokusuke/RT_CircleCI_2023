@@ -15,10 +15,11 @@ jobs:
     steps:
       - checkout  
       - aws-cli/setup:
-          profile-name: default
-      - aws-cli/role-arn-setup:
-          profile-name: circleci-oidc
-          role-arn: ${AWS_ROLE_ARN}
+          profile-name: "circleci-oidc"
+          aws-region: AWS_DEFAULT_REGION
+          # optional parameters
+          role-session-name: "circleci-session"
+          session-duration: "1800"
       - run:
           name: aws-sts-assume-role
           command: |
