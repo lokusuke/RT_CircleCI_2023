@@ -5,7 +5,7 @@ orbs:
 jobs:
   aws-example:
     docker:
-      - image: cimg/aws:2022.06
+      - image: cimg/aws:2023.04
     steps:
       - checkout
       # run the aws-cli/setup command from the orb
