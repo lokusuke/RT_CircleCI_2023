@@ -49,7 +49,6 @@ Parameters:
 
 Resources:
   IAMRoleForEC2: # EC2用のIAMロールを作成
-    Description: IAM Role for EC2 instance
     Type: AWS::IAM::Role
     Properties:
       RoleName: SecretManagerReadOnlyAccess
