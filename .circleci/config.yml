@@ -3,21 +3,8 @@ orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@3.1
 
-parameters:
-  profile-name:
-    description: using it when you run aws-cli command
-    type: string 
-    default: oidc-profile
-  role-session-name:
-    description: using it when circleci assume role
-    type: string 
-    default: circleci-session
-  vpc-stack-name:
-    type: string 
-    description: using it when CloudFormation creates the vpc stack
-    default: test-vpc
-
 jobs:
+  ## check CFn templates
   cfn-lint:
     executor: python/default
     steps:
@@ -27,7 +14,23 @@ jobs:
           name: run cfn-lint
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
+  ## assume-role and create stacks
   aws-oidc-create-stack:
+    #### You can CHANGE parameters below!!#######################################
+    parameters:
+      profile-name:
+        description: using it when you run aws-cli command
+        type: string 
+        default: oidc-profile
+      role-session-name:
+        description: using it when circleci assume role
+        type: string 
+        default: circleci-session
+      vpc-stack-name:
+        type: string 
+        description: using it when CloudFormation creates the vpc stack
+        default: test-vpc
+    #############################################################################
     docker:
       - image: cimg/aws:2023.04
     steps:
