@@ -13,7 +13,7 @@ jobs:
           name: run cfn-lint
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
-  aws-oidc-role:
+  aws-oidc-create-stack:
     docker:
       - image: cimg/aws:2023.04
     steps:
@@ -33,10 +33,6 @@ jobs:
           command: |
             # must use same profile specified in the step above
             aws s3 ls --profile "OIDC-PROFILE"
-  aws-cfn-create-stack:
-    docker:
-      - image: cimg/aws:2023.04
-    steps:
       - run:
           name: aws-cfn-template-test
           command: |
@@ -50,14 +46,14 @@ workflows:
   cfn-test:
     jobs:
       - cfn-lint
-      - aws-oidc-role:
+      - aws-oidc-create-stack:
           # must use a valid CircleCI context if you need OIDC token
           context: aws
           requires:
             - cfn-lint
-      - aws-cfn-create-stack:
-          context: aws
-          requires:
-            - aws-oidc-role
+      # - aws-cfn-create-stack:
+      #     context: aws
+      #     requires:
+      #       - aws-oidc-role
 
             
