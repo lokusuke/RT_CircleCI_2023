@@ -34,13 +34,12 @@ jobs:
             # must use same profile specified in the step above
             aws s3 ls --profile "OIDC-PROFILE"
         
-    
 workflows:
-  raisetech:
+  cfn-test:
     jobs:
       - cfn-lint
-  OIDC-with-AWS:
-    jobs:
       - aws-oidc-role:
           # must use a valid CircleCI context
           context: aws
+          requires:
+            - cfn-lint
