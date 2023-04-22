@@ -13,6 +13,7 @@ parameters:
     type: string 
     default: circleci-session
   vpc-stack-name:
+    type: string 
     description: using it when CloudFormation creates the vpc stack
     default: test-vpc
 
