@@ -39,7 +39,7 @@ jobs:
             aws cloudformation create-stack \
             --stack-name test-vpc \
             --template-body cloudformation/TestVPC.yml \
-            --parameters ParameterKey=SystemName,ParameterValue=RT ParameterKey2=Environment,ParameterValue2=prod,ParameterKey3=CidrBlock,ParameterValue3=10.4.0.0/16 \
+            --parameters ParameterKey=SystemName,ParameterValue=RT ParameterKey=Environment,ParameterValue=prod ParameterKey=CidrBlock,ParameterValue=10.4.0.0/16 \
             --profile "OIDC-PROFILE"
 
 workflows:
