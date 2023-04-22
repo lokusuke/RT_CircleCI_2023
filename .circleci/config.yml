@@ -3,6 +3,19 @@ orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@3.1
 
+parameters:
+  profile-name:
+    description: using it when you run aws-cli command
+    type: string 
+    default: oidc-profile
+  role-session-name:
+    description: using it when circleci assume role
+    type: string 
+    default: circleci-session
+  vpc-stack-name:
+    description: using it when CloudFormation creates the vpc stack
+    default: test-vpc
+
 jobs:
   cfn-lint:
     executor: python/default
@@ -18,29 +31,29 @@ jobs:
       - image: cimg/aws:2023.04
     steps:
       - checkout
-      # run the aws-cli/setup command from the orb
-      # you need parameter below in steps "aws-cli/setup" for OIDC  
+      # run aws-cli/setup with the installed orb
+      # you need parameter below in steps "aws-cli/setup" for OIDC token  
       - aws-cli/setup:
           # required parameter
           role-arn: $AWS_ROLE_ARN
           # optional parameters
           aws-region: AWS_DEFAULT_REGION   
-          profile-name: "OIDC-PROFILE"
-          role-session-name: "circleci-session"
+          profile-name: <<parameters.profile-name>>
+          role-session-name: <<parameters.role-session-name>>
           session-duration: "1800"
       - run:
-          name: Create stack of vpc
+          name: Create vpc stack
           command: |
             aws cloudformation create-stack \
-            --stack-name test-vpc \
+            --stack-name <<parameters.vpc-stack-name>> \
             --template-body file://cloudformation/TestVPC.yml \
             --parameters ParameterKey=SystemName,ParameterValue=RT ParameterKey=Environment,ParameterValue=prod ParameterKey=CidrBlock,ParameterValue=10.4.0.0/16 \
-            --profile "OIDC-PROFILE"
+            --profile <<parameters.profile-name>>
       - run:
           name: Wait until Stack is created
           command: |
             aws cloudformation wait stack-create-complete \
-            --stack-name test-vpc
+            --stack-name <<parameters.vpc-stack-name>>
 
 workflows:
   cfn-test:
@@ -51,8 +64,3 @@ workflows:
           context: aws
           requires:
             - cfn-lint
-      # - aws-cfn-create-stack:
-      #     context: aws
-      #     requires:
-      #       - aws-oidc-role
-            
