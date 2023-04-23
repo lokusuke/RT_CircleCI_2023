@@ -38,7 +38,7 @@ jobs:
         type: string 
         description: using it when CloudFormation creates the stack
         default: 10.4.0.0/16
-      vpc-template-body:
+      vpc-template:
         description: CloudFormation template file path
         type: string
         default: file://cloudformation/TestVPC.yml
@@ -60,12 +60,12 @@ jobs:
       - run:
           name: Create vpc stack
           command: |
-            aws cloudformation create-stack \
+            aws cloudformation deploy \
             --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
-            --template-body <<parameters.vpc-template-body>> \
+            --template <<parameters.vpc-template>> \
             --profile <<parameters.profile-name>> \
-            --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-                         ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
+            --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
+                                  ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
       - run:
           name: Wait until Stack is created
           command: |
