@@ -83,8 +83,8 @@ jobs:
             --stack-name <<parameters.system-name>>-<<parameters.environment>>-sg \
             --template <<parameters.sg-template>> \
             --profile <<parameters.profile-name>> \
-            --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-                                  ParameterKey=Environment,ParameterValue=<<parameters.environment>> \
+            --parameter-overrides ParameterKey=SystemName,UsePreviousValue=true \
+                                  ParameterKey=Environment,UsePreviousValue=true \
                                   ParameterKey=YourHomeIP,ParameterValue=<<parameters.home-ip>> \
             --no-fail-on-empty-changeset
 
