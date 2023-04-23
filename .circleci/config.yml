@@ -60,13 +60,20 @@ jobs:
       - run:
           name: Create vpc stack
           command: |
-            aws cloudformation deploy \
+            aws cloudformation create-stack \
             --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
-            --template <<parameters.vpc-template>> \
+            --template-body <<parameters.vpc-template>> \
             --profile <<parameters.profile-name>> \
-            --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
+            --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
                                   ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
-            --no-fail-on-empty-changeset
+
+          # aws cloudformation deploy \
+          # --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
+          # --template <<parameters.vpc-template>> \
+          # --profile <<parameters.profile-name>> \
+          # --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
+          #                       ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
+          # --no-fail-on-empty-changeset
       # - run:
       #     name: Wait until Stack is created
       #     command: |
