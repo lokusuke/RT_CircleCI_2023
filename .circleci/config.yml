@@ -95,5 +95,5 @@ workflows:
           # if you need parameters, you can change them below.(if you dont, CircleCI will use default parameters)
           system-name: rt
           environment: prod
-          CiderBlock: 10.4.0.0/16
+          CidrBlock: 10.4.0.0/16
 
