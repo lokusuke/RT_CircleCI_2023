@@ -49,7 +49,7 @@ jobs:
       home-ip:
         description: where can ssh to ec2 instance(for security-group)
         type: string
-        default: $HomeIP
+        default: $Home_IP
     #############################################################################
     docker:
       - image: cimg/aws:2023.04
