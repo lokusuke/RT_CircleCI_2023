@@ -33,17 +33,17 @@ jobs:
       environment:
         type: enum
         description: using it when CloudFormation creates the stack
-        enum: ["dev", "stg", "prod"]
+        enum: ["dev", "test", "prod"]
       CidrBlock:
         type: string 
         description: using it when CloudFormation creates the stack
         default: 10.4.0.0/16
       vpc-template:
-        description: CloudFormation template file path
+        description: CloudFormation vpc template file path
         type: string
         default: cloudformation/TestVPC.yml
-      securitygroup-template:
-        description: CloudFormation template file path
+      sg-template:
+        description: CloudFormation sg template file path
         type: string
         default: cloudformation/TestSG.yml
       home-ip:
@@ -59,9 +59,9 @@ jobs:
       # you need parameter below in steps "aws-cli/setup" for OIDC token  
       - aws-cli/setup:
           # required parameter
-          role-arn: $AWS_ROLE_ARN
+          role-arn: $AWS_ROLE_ARN  # need amazon rresource name (using enviroment settings in circleci)
           # optional parameters
-          aws-region: AWS_DEFAULT_REGION   
+          aws-region: AWS_DEFAULT_REGION   # need parameter's name
           profile-name: <<parameters.profile-name>>
           role-session-name: <<parameters.role-session-name>>
           session-duration: "1800"
@@ -80,22 +80,13 @@ jobs:
           name: Create security-group stack
           command: |
             aws cloudformation deploy \
-            --stack-name <<parameters.system-name>>-<<parameters.environment>>-sg \
-            --template <<parameters.securitygroup-template>> \
+            --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
+            --template <<parameters.sg-template>> \
             --profile <<parameters.profile-name>> \
             --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
                                   ParameterKey=Environment,ParameterValue=<<parameters.environment>> \
                                   ParameterKey=YourHomeIP,ParameterValue=<<parameters.home-ip>> \
             --no-fail-on-empty-changeset
-
-
-
-
-      # - run:
-      #     name: Wait until Stack is created
-      #     command: |
-      #       aws cloudformation wait stack-create-complete \
-      #       --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc
 
 workflows:
   cfn-test:
@@ -108,6 +99,5 @@ workflows:
             - cfn-lint
           # if you need parameters, you can change them below.(if you dont, CircleCI will use default parameters)
           system-name: rt
-          environment: prod
+          environment: test
           CidrBlock: 10.4.0.0/16
-
