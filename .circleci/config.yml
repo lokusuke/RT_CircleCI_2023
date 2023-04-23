@@ -70,7 +70,7 @@ jobs:
           name: Wait until Stack is created
           command: |
             aws cloudformation wait stack-create-complete \
-            --stack-name <<parameters.vpc-stack-name>>
+            --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc
 
 workflows:
   cfn-test:
