@@ -6,6 +6,7 @@ Parameters:
   SystemName:
     Description: What do you plan to name this system ?(e.g. WebSystem)
     Type: String
+    Default: rt
   
   Environment:
     Description: what environment will it be used(choose one) ?
@@ -14,7 +15,8 @@ Parameters:
       - prod
       - test
       - dev
-  
+    Default: prod
+
   YourHomeIP:
     Description: where will you SSH from ?(type your CIDR)
     Type: String
