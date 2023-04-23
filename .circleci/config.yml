@@ -49,7 +49,7 @@ jobs:
       home-ip:
         description: where can ssh to ec2 instance(for security-group)
         type: string
-        default: $Home_IP
+        default: 0.0.0.0/0
     #############################################################################
     docker:
       - image: cimg/aws:2023.04
@@ -59,7 +59,7 @@ jobs:
       # you need parameter below in steps "aws-cli/setup" for OIDC token  
       - aws-cli/setup:
           # required parameter
-          role-arn: $AWS_ROLE_ARN  # need amazon rresource name (using enviroment settings in circleci)
+          role-arn: $AWS_ROLE_ARN  # need amazon resource name (using enviroment settings in circleci)
           # optional parameters
           aws-region: AWS_DEFAULT_REGION   # need parameter's name
           profile-name: <<parameters.profile-name>>
@@ -101,3 +101,4 @@ workflows:
           system-name: rt
           environment: test
           CidrBlock: 10.4.0.0/16
+          home-ip: 118.86.184.239/32
