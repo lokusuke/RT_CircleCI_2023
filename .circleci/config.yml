@@ -74,8 +74,9 @@ jobs:
             --stack-name <<parameters.vpc-stack-name>> \
             --template-body <<parameters.vpc-template-body>> \
             --parameters <<parameters.extra-arguments>> \
-            --profile <<parameters.profile-name>>
-
+            --profile <<parameters.profile-name>> \
+            --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
+                         ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
       - run:
           name: Wait until Stack is created
           command: |
@@ -94,6 +95,5 @@ workflows:
           # if you need parameters, you can change them below.(if you dont, CircleCI will use default parameters)
           system-name: rt
           environment: prod
-          extra-arguments: --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-                           ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
+          CiderBlock: 10.4.0.0/16
 
