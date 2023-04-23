@@ -3,6 +3,7 @@ orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@3.1
   aws-cloudformation: orbss/aws-cloudformation@0.1.6
+
 jobs:
   ## check CFn templates
   cfn-lint:
@@ -47,13 +48,11 @@ jobs:
       vpc-stack-name:
         type: string 
         description: using it when CloudFormation creates the vpc stack
-        default: rt-vpc
-      vpc-template-file-path:
-        description: |
-          CloudFormation template file path
+        default: <<parameters.system-name>>-<<parameters.environment>>-vpc
+      vpc-template-body:
+        description: CloudFormation template file path
         type: string
-        default: cloudformation/TestVPC.yml
-
+        default: file://cloudformation/TestVPC.yml
     #############################################################################
     docker:
       - image: cimg/aws:2023.04
@@ -69,21 +68,14 @@ jobs:
           profile-name: <<parameters.profile-name>>
           role-session-name: <<parameters.role-session-name>>
           session-duration: "1800"
-      - create-stack:
-          extra-arguments: <<parameters.extra-arguments>>
-          stack-name: <<parameters.vpc-stack-name>>
-          template-file-path: <<parameters.template-file-path>>
-
-      # old template below
-      # - run:
-      #     name: Create vpc stack
-      #     command: |
-      #       aws cloudformation create-stack \
-      #       --stack-name <<parameters.vpc-stack-name>> \
-      #       --template-body file://cloudformation/TestVPC.yml \
-      #       --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-      #         ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> \
-      #       --profile <<parameters.profile-name>>
+      - run:
+          name: Create vpc stack
+          command: |
+            aws cloudformation create-stack \
+            --stack-name <<parameters.vpc-stack-name>> \
+            --template-body <<parameters.vpc-template-body>> \
+            --parameters <<parameters.extra-arguments>> \
+            --profile <<parameters.profile-name>>
 
       - run:
           name: Wait until Stack is created
@@ -100,7 +92,9 @@ workflows:
           context: aws
           requires:
             - cfn-lint
+          # if you need parameters, you can change them below.(if you dont, CircleCI will use default parameters)
+          system-name: rt
+          environment: prod
           extra-arguments: --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
                            ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
-          stack-name: rt-prod-vpc
-          
+
