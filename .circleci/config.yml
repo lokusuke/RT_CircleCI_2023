@@ -66,11 +66,6 @@ jobs:
             --profile <<parameters.profile-name>> \
             --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
                                   ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
-      # - run:
-      #     name: Wait until Stack is created
-      #     command: |
-      #       aws cloudformation wait stack-create-complete \
-      #       --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc
 
 workflows:
   cfn-test:
