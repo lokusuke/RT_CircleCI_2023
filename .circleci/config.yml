@@ -46,7 +46,10 @@ jobs:
         description: CloudFormation template file path
         type: string
         default: cloudformation/TestSG.yml
-        
+      home-ip:
+        description: where can ssh to ec2 instance(for security-group)
+        type: string
+        default: $HomeIP
     #############################################################################
     docker:
       - image: cimg/aws:2023.04
@@ -80,7 +83,7 @@ jobs:
             --template <<parameters.securitygroup-template>> \
             --profile <<parameters.profile-name>> \
             --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-                                  ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=YourHomeIP,ParameterValue=$HomeIP \
+                                  ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=YourHomeIP,ParameterValue=<<parameters.home-ip>> \
             --no-fail-on-empty-changeset
 
 
