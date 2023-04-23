@@ -15,7 +15,7 @@ Parameters:
       - prod
       - test
       - dev
-    Default: prod
+    Default: test
 
   YourHomeIP:
     Description: where will you SSH from ?(type your CIDR)
