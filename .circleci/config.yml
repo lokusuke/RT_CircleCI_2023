@@ -65,17 +65,17 @@ jobs:
           profile-name: <<parameters.profile-name>>
           role-session-name: <<parameters.role-session-name>>
           session-duration: "1800"
-      - run:
-          name: Create vpc stack
-          command: |
-            aws cloudformation deploy \
-            --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
-            --template <<parameters.vpc-template>> \
-            --profile <<parameters.profile-name>> \
-            --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
-                                  ParameterKey=Environment,ParameterValue=<<parameters.environment>> \
-                                  ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> \
-            --no-fail-on-empty-changeset
+      # - run:
+      #     name: Create vpc stack
+      #     command: |
+      #       aws cloudformation deploy \
+      #       --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
+      #       --template <<parameters.vpc-template>> \
+      #       --profile <<parameters.profile-name>> \
+      #       --parameter-overrides ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
+      #                             ParameterKey=Environment,ParameterValue=<<parameters.environment>> \
+      #                             ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> \
+      #       --no-fail-on-empty-changeset
       - run:
           name: Create security-group stack
           command: |
