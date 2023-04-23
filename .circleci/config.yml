@@ -38,16 +38,6 @@ jobs:
         type: string 
         description: using it when CloudFormation creates the stack
         default: 10.4.0.0/16
-      extra-arguments:
-        type: string 
-        default: ''
-        description: |
-          Optional additional arguments to pass to the `aws
-          cloudformation create-stack` command
-      vpc-stack-name:
-        type: string 
-        description: using it when CloudFormation creates the vpc stack
-        default: <<parameters.system-name>>-<<parameters.environment>>-vpc
       vpc-template-body:
         description: CloudFormation template file path
         type: string
@@ -71,9 +61,8 @@ jobs:
           name: Create vpc stack
           command: |
             aws cloudformation create-stack \
-            --stack-name <<parameters.vpc-stack-name>> \
+            --stack-name <<parameters.system-name>>-<<parameters.environment>>-vpc \
             --template-body <<parameters.vpc-template-body>> \
-            --parameters <<parameters.extra-arguments>> \
             --profile <<parameters.profile-name>> \
             --parameters ParameterKey=SystemName,ParameterValue=<<parameters.system-name>> \
                          ParameterKey=Environment,ParameterValue=<<parameters.environment>> ParameterKey=CidrBlock,ParameterValue=<<parameters.CidrBlock>> 
