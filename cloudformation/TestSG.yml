@@ -6,6 +6,7 @@ Parameters:
   SystemName:
     Description: What do you plan to name this system ?(e.g. WebSystem)
     Type: String
+    Default: rt
   
   Environment:
     Description: what environment will it be used(choose one) ?
@@ -14,7 +15,8 @@ Parameters:
       - prod
       - test
       - dev
-  
+    Default: test
+
   YourHomeIP:
     Description: where will you SSH from ?(type your CIDR)
     Type: String
@@ -42,7 +44,9 @@ Resources:
           Value: !Sub ${Environment}
         - Key: Name
           Value: !Sub ${SystemName}-${Environment}-web-sg
-      VpcId: !ImportValue TestVPC-VpcID
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${SystemName}-${Environment}-vpc-VpcId
 
   TestSSHSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -59,7 +63,9 @@ Resources:
           Value: !Sub ${Environment}
         - Key: Name
           Value: !Sub ${SystemName}-${Environment}-ssh-sg
-      VpcId: !ImportValue TestVPC-VpcID
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${SystemName}-${Environment}-vpc-VpcId
 
 #DBサーバー用セキュリティグループ(mysql)
   TestDBSecurityGroup:
@@ -78,7 +84,9 @@ Resources:
           Value: !Sub ${Environment}
         - Key: Name
           Value: !Sub ${SystemName}-${Environment}-db-sg
-      VpcId: !ImportValue TestVPC-VpcID
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${SystemName}-${Environment}-vpc-VpcId
 
 #ALB用セキュリティグループ（HTTP）
   TestALBSecurityGroup:
@@ -96,31 +104,33 @@ Resources:
           Value: !Sub ${Environment}
         - Key: Name
           Value: !Sub ${SystemName}-${Environment}-alb-sg
-      VpcId: !ImportValue TestVPC-VpcID
+      VpcId: 
+        Fn::ImportValue:
+          !Sub ${SystemName}-${Environment}-vpc-VpcId
 
 Outputs:
   TestWebSecurityGroup:
     Description: Information about the "TestWebSecurityGroup"
     Value: !GetAtt TestWebSecurityGroup.GroupId
     Export: 
-      Name: !Sub ${AWS::StackName}-TestWebSecurityGroupID
+      Name: !Sub ${AWS::StackName}-TestWebSecurityGroupId
 
   TestSSHSecurityGroup:
     Description: Information about the "TestSSHSecurityGroup"
     Value: !GetAtt TestSSHSecurityGroup.GroupId
     Export: 
-      Name: !Sub ${AWS::StackName}-TestSSHSecurityGroupID
+      Name: !Sub ${AWS::StackName}-TestSSHSecurityGroupId
 
   TestDBSecurityGroup:
     Description: Information about the "TestDBSecurityGroup"
     Value: !GetAtt TestDBSecurityGroup.GroupId
     Export: 
-      Name: !Sub ${AWS::StackName}-TestDBSecurityGroupID
+      Name: !Sub ${AWS::StackName}-TestDBSecurityGroupId
 
   TestALBSecurityGroup:
     Description: Information about the "TestALBSecurityGroup"
     Value: !GetAtt TestALBSecurityGroup.GroupId
     Export: 
-      Name: !Sub ${AWS::StackName}-TestALBSecurityGroupID
+      Name: !Sub ${AWS::StackName}-TestALBSecurityGroupId
 
 

@@ -15,6 +15,7 @@ Parameters:
   SystemName:
     Description: What do you plan to name this system ?(e.g. WebSystem)
     Type: String
+    Default: rt
   
   Environment:
     Description: what environment will it be used(choose one) ?
@@ -23,6 +24,7 @@ Parameters:
       - prod
       - test
       - dev
+    Default: prod
 
   CidrBlock:
     Description: type the subnet range you will use(CIDR).
@@ -167,22 +169,22 @@ Outputs:
     Description: Information about the "TestVPC"
     Value: !Ref TestVPC
     Export: 
-      Name: !Sub ${AWS::StackName}-VpcID
+      Name: !Sub ${AWS::StackName}-VpcId
   
   TestPublicSubnet1a:
     Description: Information about the "TestPublicSubnet1a"
     Value: !Ref TestPublicSubnet1a
     Export: 
-      Name: !Sub ${AWS::StackName}-PublicSubnetID
+      Name: !Sub ${AWS::StackName}-PublicSubnetId
   
   TestPrivateSubnet1a:
     Description: Information about the "TestPrivateSubnet1a"
     Value: !Ref TestPrivateSubnet1a
     Export: 
-      Name: !Sub ${AWS::StackName}-PrivateSubnet1aID
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1aId
 
   TestPrivateSubnet1c:
     Description: Information about the "TestPrivateSubnet1c"
     Value: !Ref TestPrivateSubnet1c
     Export: 
-      Name: !Sub ${AWS::StackName}-PrivateSubnet1cID
+      Name: !Sub ${AWS::StackName}-PrivateSubnet1cId
