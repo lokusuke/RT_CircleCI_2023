@@ -59,7 +59,7 @@ jobs:
       # you need parameter below in steps "aws-cli/setup" for OIDC token  
       - aws-cli/setup:
           # required parameter
-          role-arn: $AWS_ROLE_ARN  # need amazon resource name (using enviroment settings in circleci)
+          role-arn: $AWS_ROLE_ARN  # need amazon resource name (using enviroment settings in circleci) for assume-role with OIDC token
           # optional parameters
           aws-region: AWS_DEFAULT_REGION   # need parameter's name
           profile-name: <<parameters.profile-name>>
@@ -101,4 +101,3 @@ workflows:
           system-name: rt
           environment: test
           CidrBlock: 10.4.0.0/16
-          home-ip: 118.86.184.239/32
